@@ -1,41 +1,42 @@
+"use client";
+
 import Link from "next/link";
-import { adminModules } from "../../lib/data";
+import { storage, SiteSettings } from "../../lib/storage";
+import { useEffect, useState } from "react";
 
 export default function AdminPage() {
+  const [settings, setSettings] = useState<SiteSettings>(storage.getSettings());
+
+  useEffect(() => {
+    setSettings(storage.getSettings());
+  }, []);
+
   return (
     <section className="section">
       <div className="container">
-        <h3>অ্যাডমিন কমান্ড সেন্টার</h3>
-        <p className="section-sub">
-          সেলার, কন্টেন্ট, থিম, কোড এবং পেমেন্ট কনফিগারেশন — সবকিছু এক জায়গা থেকে নিয়ন্ত্রণ করুন।
-        </p>
-        <div className="cards">
-          {adminModules.map((module) => (
-            <div key={module.title} className="card fade-up">
-              <h4>{module.title}</h4>
-              <p>{module.detail}</p>
-            </div>
-          ))}
+        <h3>অ্যাডমিন ড্যাশবোর্ড</h3>
+        <p className="section-sub">সাইট কন্ট্রোল, অর্ডার, ইউজার এবং নোটিফিকেশন।</p>
+        <div className="admin-nav">
+          <Link href="/admin/orders">অর্ডার</Link>
+          <Link href="/admin/users">ইউজার</Link>
+          <Link href="/admin/notifications">নোটিফিকেশন</Link>
+          <Link href="/admin/settings">সেটিংস</Link>
         </div>
-      </div>
 
-      <div className="section">
-        <div className="container surface grid-2">
-          <div>
-            <h3>থিম স্টুডিও</h3>
-            <p>রঙ, ফন্ট এবং হোম ব্যানার রিয়েল-টাইমে আপডেট করুন।</p>
-            <div className="tag-row">
-              <span className="tag">লাইভ প্রিভিউ</span>
-              <span className="tag">রোল ব্যাক</span>
-              <span className="tag">ভার্সনিং</span>
+        <div className="section">
+          <div className="cards">
+            <div className="card">
+              <h4>সাইট নাম</h4>
+              <p>{settings.name}</p>
             </div>
-          </div>
-          <div className="card">
-            <h4>সেটিংস শর্টকাট</h4>
-            <p>অ্যাডমিন প্যানেল কনফিগারেশন।</p>
-            <Link className="btn primary" href="/admin/login">
-              অ্যাডমিন লগইন
-            </Link>
+            <div className="card">
+              <h4>লোকেশন</h4>
+              <p>{settings.location}</p>
+            </div>
+            <div className="card">
+              <h4>COD চার্জ</h4>
+              <p>৳ {settings.codCharge}</p>
+            </div>
           </div>
         </div>
       </div>

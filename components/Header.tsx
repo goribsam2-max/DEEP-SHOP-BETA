@@ -1,36 +1,37 @@
-import Link from "next/link";
+"use client";
 
-const navLinks = [
-  { href: "/marketplace", label: "মার্কেটপ্লেস" },
-  { href: "/features", label: "ফিচার" },
-  { href: "/sellers", label: "সেলার" },
-  { href: "/pricing", label: "প্রাইসিং" },
-  { href: "/support", label: "সাপোর্ট" },
-  { href: "/cart", label: "কার্ট" },
-  { href: "/wishlist", label: "উইশলিস্ট" },
-];
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { storage, SiteSettings } from "../lib/storage";
 
 export default function Header() {
+  const [settings, setSettings] = useState<SiteSettings>(storage.getSettings());
+
+  useEffect(() => {
+    setSettings(storage.getSettings());
+  }, []);
+
   return (
     <header className="header">
       <div className="container header-inner">
         <div className="brand">
-          <h1>Bangla Bazar</h1>
-          <span>বাংলাদেশের মাল্টি-সেলার মার্কেটপ্লেস</span>
+          <h1>{settings.name}</h1>
+          <span>{settings.location}</span>
         </div>
         <nav className="nav">
-          {navLinks.map((link) => (
-            <Link key={link.href} href={link.href}>
-              {link.label}
-            </Link>
-          ))}
-          <div className="nav-actions">
-            <Link href="/auth/login">লগইন</Link>
-            <Link className="button" href="/admin/login">
-              অ্যাডমিন প্যানেল
-            </Link>
-          </div>
+          <Link href="/">হোম</Link>
+          <Link href="/shop">শপ</Link>
+          <Link href="/features">ফিচার</Link>
+          <Link href="/offers">অফার</Link>
+          <Link href="/orders">আমার অর্ডার</Link>
+          <Link href="/admin">অ্যাডমিন</Link>
         </nav>
+        <div className="nav-actions">
+          <Link href="/auth/login">লগইন</Link>
+          <Link className="button" href="/cart">
+            কার্ট
+          </Link>
+        </div>
       </div>
     </header>
   );

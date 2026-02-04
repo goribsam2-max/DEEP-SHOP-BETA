@@ -1,37 +1,34 @@
-import Link from "next/link";
+"use client";
+
+import { useEffect, useState } from "react";
+import { storage, SiteSettings } from "../lib/storage";
 
 export default function Footer() {
+  const [settings, setSettings] = useState<SiteSettings>(storage.getSettings());
+
+  useEffect(() => {
+    setSettings(storage.getSettings());
+  }, []);
+
   return (
     <footer className="footer">
       <div className="container footer-grid">
         <div>
-          <h4>Bangla Bazar</h4>
-          <p>বাংলাদেশের সবচেয়ে বড় লোকাল ইকমার্স কমিউনিটি।</p>
-        </div>
-        <div>
-          <h4>দ্রুত লিংক</h4>
-          <ul>
-            <li>
-              <Link href="/marketplace">পণ্য ক্যাটালগ</Link>
-            </li>
-            <li>
-              <Link href="/sellers">সেলার অনবোর্ডিং</Link>
-            </li>
-            <li>
-              <Link href="/support">হেল্প সেন্টার</Link>
-            </li>
-          </ul>
+          <h4>{settings.name}</h4>
+          <p>{settings.location}</p>
         </div>
         <div>
           <h4>যোগাযোগ</h4>
-          <ul>
-            <li>📞 ১৬২৩৪</li>
-            <li>📧 support@banglabazar.bd</li>
-            <li>📍 ঢাকা, বাংলাদেশ</li>
-          </ul>
+          <p>📞 {settings.paymentNumber}</p>
+          <p>📧 support@vibegadgets.com</p>
+        </div>
+        <div>
+          <h4>পেমেন্ট</h4>
+          <p>COD চার্জ: ৳ {settings.codCharge}</p>
+          <p>বিকাশ/নগদ নাম্বার: {settings.paymentNumber}</p>
         </div>
       </div>
-      <small>© ২০২৪ Bangla Bazar. সর্বস্বত্ব সংরক্ষিত।</small>
+      <small>© ২০২৪ {settings.name}. সর্বস্বত্ব সংরক্ষিত।</small>
     </footer>
   );
 }

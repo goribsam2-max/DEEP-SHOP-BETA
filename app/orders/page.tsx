@@ -1,24 +1,31 @@
-import Link from "next/link";
+"use client";
+
+import { useEffect, useState } from "react";
+import { OrderData, storage } from "../../lib/storage";
 
 export default function OrdersPage() {
+  const [orders, setOrders] = useState<OrderData[]>([]);
+
+  useEffect(() => {
+    setOrders(storage.getOrders());
+  }, []);
+
   return (
     <section className="section">
-      <div className="container grid-2">
-        <div>
-          <h3>অর্ডার ম্যানেজমেন্ট</h3>
-          <p className="section-sub">সেলার ও কাস্টমার—উভয়ের অর্ডার ট্র্যাকিং এক জায়গায়।</p>
-          <ul>
-            <li>আজকের অর্ডার: ১২৫</li>
-            <li>পেন্ডিং: ১৮</li>
-            <li>রিটার্ন রিকোয়েস্ট: ৫</li>
-          </ul>
-        </div>
-        <div className="card">
-          <h4>অর্ডার রিপোর্ট</h4>
-          <p>সাপ্তাহিক রিপোর্ট ডাউনলোড করুন।</p>
-          <Link className="btn primary" href="/admin">
-            রিপোর্ট দেখুন
-          </Link>
+      <div className="container">
+        <h3>আমার অর্ডার</h3>
+        <p className="section-sub">আপনার অর্ডার স্ট্যাটাস দেখুন।</p>
+        <div className="cards">
+          {orders.map((order) => (
+            <div key={order.id} className="card fade-up">
+              <h4>{order.id}</h4>
+              <p>স্ট্যাটাস: {order.status}</p>
+              <p>মোট: ৳ {order.total + order.deliveryCharge}</p>
+              <p>পেমেন্ট: {order.paymentMethod}</p>
+              {order.trxId ? <p>ট্রানজেকশন আইডি: {order.trxId}</p> : null}
+              <p>ডেলিভারি ঠিকানা: {order.customerAddress}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

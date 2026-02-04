@@ -1,41 +1,73 @@
-import { notFound } from "next/navigation";
+"use client";
+
+import { useParams } from "next/navigation";
+import Link from "next/link";
+import { useMemo, useState } from "react";
 import { products } from "../../../lib/data";
+import { storage } from "../../../lib/storage";
 
-interface ProductPageProps {
-  params: { id: string };
-}
-
-export default function ProductPage({ params }: ProductPageProps) {
-  const product = products.find((item) => item.id === params.id);
+export default function ProductDetailsPage() {
+  const params = useParams();
+  const product = useMemo(
+    () => products.find((item) => item.id === params?.id),
+    [params?.id]
+  );
+  const [activeIndex, setActiveIndex] = useState(0);
 
   if (!product) {
-    notFound();
+    return (
+      <section className="section">
+        <div className="container">পণ্য পাওয়া যায়নি।</div>
+      </section>
+    );
   }
+
+  const addToCart = () => {
+    const cart = storage.getCart();
+    const existing = cart.find((item) => item.productId === product.id);
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      cart.push({
+        productId: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: 1,
+        image: product.images[0],
+      });
+    }
+    storage.saveCart([...cart]);
+  };
 
   return (
     <section className="section">
       <div className="container grid-2">
-        <div className="fade-up">
-          <span className="badge">{product.badge}</span>
-          <h3>{product.name}</h3>
-          <p className="section-sub">ফ্যাশন লাইফস্টাইলের জন্য প্রিমিয়াম কোয়ালিটি।</p>
-          <h2>{product.price}</h2>
-          <ul>
-            <li>ক্যাশ অন ডেলিভারি</li>
-            <li>৩ দিনের রিটার্ন</li>
-            <li>ডোরস্টেপ ডেলিভারি</li>
-          </ul>
+        <div className="gallery fade-up">
+          <img src={product.images[activeIndex]} alt={product.name} />
+          <div className="thumbnail-row">
+            {product.images.map((img, index) => (
+              <img
+                key={img}
+                src={img}
+                alt={`${product.name}-${index}`}
+                className={`thumbnail ${index === activeIndex ? "active" : ""}`}
+                onClick={() => setActiveIndex(index)}
+              />
+            ))}
+          </div>
         </div>
         <div className="card fade-up">
-          <h4>অর্ডার ইনফো</h4>
-          <p>স্টক: উপলব্ধ</p>
+          <span className="badge">{product.badge}</span>
+          <h3>{product.name}</h3>
+          <p className="section-sub">{product.description}</p>
+          <h2>৳ {product.price}</h2>
           <div className="actions">
-            <button className="btn primary" type="button">
-              কার্টে যোগ করুন
+            <button className="btn primary" type="button" onClick={addToCart}>
+              কার্টে যোগ
             </button>
-            <button className="btn ghost" type="button">
-              উইশলিস্টে রাখুন
-            </button>
+            <Link className="btn ghost" href="/checkout">
+              এখনই কিনুন
+            </Link>
           </div>
         </div>
       </div>

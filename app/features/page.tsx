@@ -1,16 +1,16 @@
-import { platformFeatures } from "../../lib/data";
+import { features } from "../../lib/data";
 
 export default function FeaturesPage() {
   return (
     <section className="section">
       <div className="container">
-        <h3>প্ল্যাটফর্ম ফিচারসমূহ</h3>
-        <p className="section-sub">৩০+ প্রিমিয়াম ফিচারসহ সম্পূর্ণ ইকমার্স স্ট্যাক।</p>
+        <h3>৩৫+ প্রফেশনাল ফিচার</h3>
+        <p className="section-sub">Vibe Gadgets এর ফুল কমার্স স্ট্যাক।</p>
         <div className="cards">
-          {platformFeatures.map((feature) => (
+          {features.map((feature) => (
             <div key={feature} className="card fade-up">
               <h4>{feature}</h4>
-              <p>এটি আপনার ব্যবসাকে দ্রুত স্কেল করতে সহায়তা করবে।</p>
+              <p>ব্যবসা স্কেল করার জন্য অপ্টিমাইজড।</p>
             </div>
           ))}
         </div>

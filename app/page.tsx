@@ -1,42 +1,41 @@
+"use client";
+
 import Link from "next/link";
-import { highlights, products, sellerTools } from "../lib/data";
+import { useEffect, useState } from "react";
+import { categories, products } from "../lib/data";
+import { storage } from "../lib/storage";
 
 export default function HomePage() {
+  const [broadcasts, setBroadcasts] = useState<Array<{ id: string; title: string; image: string }>>([]);
+
+  useEffect(() => {
+    setBroadcasts(storage.getBroadcasts());
+  }, []);
+
   return (
     <>
       <section className="hero">
         <div className="container hero-grid">
           <div className="fade-up">
-            <span className="pill">🇧🇩 Bangladesh Ready • Premium Fashion Commerce</span>
-            <h2>স্টাইলিশ, স্মার্ট, এবং দ্রুত — আপনার ব্র্যান্ডের জন্য পূর্ণাঙ্গ ইকমার্স প্ল্যাটফর্ম</h2>
+            <span className="pill">স্টাইলিশ • অ্যানিমেটেড • স্মার্ট শপিং</span>
+            <h2>Vibe Gadgets — আপনার জন্য প্রিমিয়াম গ্যাজেটস মার্কেটপ্লেস</h2>
             <p>
-              Bangla Bazar হলো মাল্টি-সেলার মার্কেটপ্লেস যেখানে ফ্যাশন, লাইফস্টাইল, গ্রোসারি,
-              এবং ব্র্যান্ডেড স্টোর এক জায়গায় পরিচালনা করা যায়।
+              স্মার্টফোন থেকে স্মার্টওয়াচ, সবকিছুর জন্য নির্ভরযোগ্য এবং দ্রুত শপিং অভিজ্ঞতা।
             </p>
             <div className="actions">
-              <Link className="btn primary" href="/auth/register">
-                রেজিস্টার করুন
-              </Link>
-              <Link className="btn ghost" href="/marketplace">
+              <Link className="btn primary" href="/shop">
                 শপিং শুরু করুন
               </Link>
-            </div>
-            <div className="tag-row" style={{ marginTop: "20px" }}>
-              <span className="tag">লাইভ ট্র্যাকিং</span>
-              <span className="tag">ফাস্ট ডেলিভারি</span>
-              <span className="tag">ক্যাশ অন ডেলিভারি</span>
+              <Link className="btn ghost" href="/features">
+                সব ফিচার
+              </Link>
             </div>
           </div>
-          <div className="card hero-card fade-up">
-            <span className="badge">আজকের ট্রেন্ডিং</span>
-            <h3>Luxury Streetwear Pack</h3>
-            <p>বিকাশ/নগদ/কার্ড পেমেন্ট | ফ্রি হোম ডেলিভারি</p>
-            <h2>৳ ২,৪৯৯</h2>
-            <ul>
-              <li>৩ দিনের রিটার্ন পলিসি</li>
-              <li>স্টাইলিশ লুক বুক ফ্রি</li>
-              <li>লাইভ ফ্যাশন কনসাল্টিং</li>
-            </ul>
+          <div className="card fade-up">
+            <span className="badge">আজকের অফার</span>
+            <h3>Vibe Pro Bundle</h3>
+            <p>বিকাশ/নগদ/ক্যাশ অন ডেলিভারি</p>
+            <h2>৳ ১২,৯৯০</h2>
             <button className="btn primary" type="button">
               এখনই কিনুন
             </button>
@@ -44,15 +43,34 @@ export default function HomePage() {
         </div>
       </section>
 
+      {broadcasts.length ? (
+        <section className="section">
+          <div className="container">
+            <h3>ব্রডকাস্ট নোটিফিকেশন</h3>
+            <div className="cards">
+              {broadcasts.map((item) => (
+                <div key={item.id} className="notification-banner fade-up">
+                  <img src={item.image} alt={item.title} />
+                  <div>
+                    <h4>{item.title}</h4>
+                    <p>অ্যাডমিন থেকে সর্বশেষ আপডেট।</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       <section className="section">
         <div className="container">
-          <h3>কেন Bangla Bazar?</h3>
-          <p className="section-sub">একটি সম্পূর্ণ ব্র্যান্ড অপারেটিং সিস্টেম।</p>
+          <h3>ক্যাটাগরি</h3>
+          <p className="section-sub">আপনার পছন্দের ক্যাটাগরি বেছে নিন।</p>
           <div className="cards">
-            {highlights.map((item) => (
-              <div key={item.title} className="card fade-up">
-                <h4>{item.title}</h4>
-                <p>{item.description}</p>
+            {categories.map((cat) => (
+              <div key={cat} className="card fade-up">
+                <h4>{cat}</h4>
+                <p>এক্সক্লুসিভ ডিল এবং নতুন কালেকশন।</p>
               </div>
             ))}
           </div>
@@ -60,55 +78,17 @@ export default function HomePage() {
       </section>
 
       <section className="section">
-        <div className="container surface grid-2">
-          <div>
-            <h3>সেলারদের জন্য পূর্ণ স্ট্যাক</h3>
-            <p>শপ ম্যানেজমেন্ট, প্রোমো, রিপোর্টিং এবং কাস্টমার কেয়ার এক সাথে।</p>
-            <ul>
-              {sellerTools.map((tool) => (
-                <li key={tool}>{tool}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="card">
-            <h4>সেলার অনবোর্ডিং</h4>
-            <p>৩০ মিনিটে আপনার শপ লাইভ করুন, লাইভ ট্রেনিং এবং সাপোর্ট সহ।</p>
-            <Link className="btn primary" href="/sellers">
-              সেলার হাব
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="section">
         <div className="container">
-          <h3>ট্রেন্ডিং পণ্যসমূহ</h3>
-          <p className="section-sub">স্টাইল এবং স্মার্ট কম্বো একসাথে।</p>
+          <h3>ফিচার্ড প্রোডাক্ট</h3>
           <div className="cards">
             {products.map((product) => (
               <Link key={product.id} href={`/product/${product.id}`} className="card fade-up">
                 <span className="badge">{product.badge}</span>
+                <img src={product.images[0]} alt={product.name} />
                 <h4>{product.name}</h4>
-                <p>{product.price}</p>
+                <p>৳ {product.price}</p>
               </Link>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="container stat-grid">
-          <div className="stat">
-            <strong>৫,২০০+</strong>
-            <span>ভেরিফায়েড সেলার</span>
-          </div>
-          <div className="stat">
-            <strong>৬৪ জেলা</strong>
-            <span>ডেলিভারি কভারেজ</span>
-          </div>
-          <div className="stat">
-            <strong>২৪/৭</strong>
-            <span>লাইভ সাপোর্ট</span>
           </div>
         </div>
       </section>
