@@ -2,7 +2,9 @@ import Link from "next/link";
 
 const navLinks = [
   { href: "/marketplace", label: "মার্কেটপ্লেস" },
+  { href: "/features", label: "ফিচার" },
   { href: "/sellers", label: "সেলার" },
+  { href: "/pricing", label: "প্রাইসিং" },
   { href: "/support", label: "সাপোর্ট" },
   { href: "/cart", label: "কার্ট" },
   { href: "/wishlist", label: "উইশলিস্ট" },
